@@ -1,36 +1,26 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from PIL import Image
-from io import BytesIO
-import datetime
-import time
-import os
+import cv2
 
-output_dir = "hippo_screenshots"
-os.makedirs(output_dir, exist_ok=True)
+stream_url = "https://zssd-hippo.hls.camzonecdn.com/CamzoneStreams/zssd-hippo/chunklist.m3u8"  # <- wstaw tu pełny link
 
-options = Options()
-options.add_argument('--headless')
-options.add_argument('--window-size=1920,1080')
+cap = cv2.VideoCapture(stream_url)
 
-driver = webdriver.Chrome(options=options)  # SeleniumManager automatycznie dobiera ChromeDriver
+if not cap.isOpened():
+    print("Nie udało się otworzyć strumienia")
+    exit()
 
-driver.get("https://zoo.sandiegozoo.org/cams/hippo-cam")
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("Brak danych z kamery")
+        break
 
-time.sleep(10)  # poczekaj na załadowanie streamu
+    cv2.imshow("Hippo Cam", frame)
 
-num_screenshots = 10
-interval_seconds = 5
+    # zapis pojedynczego frame'a
+    cv2.imwrite("frame.jpg", frame)
 
-for _ in range(num_screenshots):
-    screenshot = driver.get_screenshot_as_png()
-    image = Image.open(BytesIO(screenshot))
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
-    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = os.path.join(output_dir, f"hippo_{timestamp}.png")
-    image.save(filename)
-
-    print(f"Zapisano zrzut ekranu: {filename}")
-    time.sleep(interval_seconds)
-
-driver.quit()
+cap.release()
+cv2.destroyAllWindows()
