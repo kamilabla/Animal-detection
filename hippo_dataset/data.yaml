@@ -1,13 +1,13 @@
-train: ../train/images
-val: ../valid/images
-test: ../test/images
+train: C:/Users/kamil/Semestr 6/ISS/hippo_dataset//train/images
+val: C:/Users/kamil/Semestr 6/ISS/hippo_dataset/valid/images
+test: C:/Users/kamil/Semestr 6/ISS/hippo_dataset/test/images
 
-nc: 2
-names: ['hippopotamus', 'hippos']
+nc: 5
+names: ['Activity', 'Eat', 'Hippopotamus', 'Sleep', 'Swim']
 
 roboflow:
-  workspace: hypo
-  project: hippopotamusmain
-  version: 12
-  license: CC BY 4.0
-  url: https://universe.roboflow.com/hypo/hippopotamusmain/dataset/12
+  workspace: aomgandhi
+  project: hippopotamus-activity
+  version: 1
+  license: MIT
+  url: https://universe.roboflow.com/aomgandhi/hippopotamus-activity/dataset/1
